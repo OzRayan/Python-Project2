@@ -1,6 +1,13 @@
 import constants
+import os
+
 
 NUM_TEAMS = len(constants.TEAMS)
+
+
+def cls():
+    # short cls snippet from https://stackoverflow.com/questions/517970/how-to-clear-the-interpreter-console
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def print_main_menu() -> None:
@@ -29,8 +36,23 @@ def print_main_menu() -> None:
     print("=" * width)
 
 
+def get_main_option() -> str:
+    menu_choice = None
+    while menu_choice != "1" and menu_choice != "2":
+        try:
+            menu_choice = input("Enter an option > ")
+            if menu_choice != "1" and menu_choice != "2":
+                raise ValueError
+        except ValueError:
+            print("Valid options are 1 and 2.", end=' ')
+    return menu_choice
+
+
 def start_app() -> None:
     print_main_menu()
+    main_option = get_main_option()
+    if main_option == "2":
+        exit()
 
 
 if __name__ == "__main__":
