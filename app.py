@@ -14,30 +14,50 @@ def print_main_menu() -> None:
     """
     Function takes no arguments
     Responsible only for printing the menu for the user
+    Use an even number for the width!
     :return: None
     """
-    width = 44
-    menu = "-- MENU --"
-    line_one = "  Enter an option:"
-    option_one = "  1) Display Team stats"
-    option_two = "  2) Quit"
-    border = "||"
-    empty_space = width - 2 * len(border)
+    width: int = 38
+    border: str = "||"
     print()
     print("=" * width)
-    print(border + empty_space * " " + border)
-    padding = int((empty_space - len(menu)) / 2)
-    print(border + padding * " " + menu + padding * " " + border)
-    print(border + empty_space * " " + border)
-    print(border + line_one + (empty_space - len(line_one)) * " " + border)
-    print(border + option_one + (empty_space - len(option_one)) * " " + border)
-    print(border + option_two + (empty_space - len(option_two)) * " " + border)
-    print(border + empty_space * " " + border)
+    print_framed_text(width, border, "")
+    print_framed_text(width, border, "-- MENU --", True)
+    print_framed_text(width, border, "")
+    print_framed_text(width, border, "Enter an option:")
+    print_framed_text(width, border, "1) Display Team stats")
+    print_framed_text(width, border, "2) Quit")
+    print_framed_text(width, border, "")
     print("=" * width)
+
+
+def print_framed_text(width: int = 50, border: str = "", text: str = "",
+                      centered: bool = False, indent: int = 4) -> None:
+    """
+    Function that accepts a width, a string to put on either side as the "frame" denoted as border,
+    a boolean on whether the text should be centered, and an optional indention in spaces for the text
+    Args:
+        :param width: width of the frame including borders
+        :param border: the border string that prints on either side
+        :param text:  optional text to be displayed
+        :param centered: bool representing if text should be centered
+        :param indent: optional integer for number of spaces of indentation
+
+    Returns:
+        :return: None
+    """
+    padding: int = int(((width - 2 * len(border)) - len(text)) / 2)
+    if text == "":
+        print(f"{border}{((padding * 2) *  ' ')}{border}")
+    elif centered:
+        print(f"{border}{padding * ' '}{text}{padding  * ' '}{border}")
+    else:
+        right_padding: int = int(width - (indent + len(text) + len(border) * 2))
+        print(f"{border}{indent * ' '}{text}{right_padding * ' '}{border}")
 
 
 def get_main_option() -> str:
-    menu_choice = None
+    menu_choice: str = None
     while menu_choice != "1" and menu_choice != "2":
         try:
             menu_choice = input("Enter an option > ")
@@ -45,12 +65,13 @@ def get_main_option() -> str:
                 raise ValueError
         except ValueError:
             print("Valid options are 1 and 2.", end=' ')
+    cls()
     return menu_choice
 
 
 def start_app() -> None:
     print_main_menu()
-    main_option = get_main_option()
+    main_option: str = get_main_option()
     if main_option == "2":
         exit()
 
