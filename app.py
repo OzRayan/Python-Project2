@@ -1,8 +1,7 @@
+# ASCII frames are heavily inspired by https://www.asciiart.eu/art-and-design/borders
 import constants
 import os
-
-
-NUM_TEAMS = len(constants.TEAMS)
+from typing import List, Dict
 
 
 def cls():
@@ -69,7 +68,32 @@ def get_main_option() -> str:
     return menu_choice
 
 
+def clean_data() -> List[Dict]:
+    players = constants.PLAYERS;
+    cleaned_data = []
+    for player in players:
+        player["experience"] = player["experience"] == "YES"
+        player["guardians"] = player["guardians"].split("and")
+        player["height"] = int(player["height"].replace("inches", ""))
+        cleaned_data.append(player)
+    return cleaned_data
+
+
+def create_rosters() -> List[Dict]:
+    teams = constants.TEAMS
+    return [{"name": team, "players": []} for team in teams]
+
+
+def sort_into_teams(exp, no_exp, rosters):
+    print(rosters)
+
+
 def start_app() -> None:
+    rosters = create_rosters()
+    data = clean_data()
+    experienced_players = [player for player in data if player["experience"]]
+    rookie_players = [player for player in data if not player["experience"]]
+    filled_rosters = sort_into_teams(experienced_players, rookie_players, rosters)
     print_main_menu()
     main_option: str = get_main_option()
     if main_option == "2":
