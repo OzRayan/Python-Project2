@@ -72,7 +72,7 @@ Press ENTER to continue...
 ```
 
 ## Exceeds
-
+-      
 ### Cleaning guardian field
 - [ ] When cleaning the guardian field before adding it into your newly created collection, split up the guardian string into a List.
 

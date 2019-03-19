@@ -4,8 +4,12 @@ import os
 from typing import List, Dict
 
 
-def cls():
+def cls() -> None:
     # short cls snippet from https://stackoverflow.com/questions/517970/how-to-clear-the-interpreter-console
+    """
+    Simple function to clear the console
+    :return: None
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
@@ -31,6 +35,10 @@ def print_main_menu() -> None:
 
 
 def print_stats_menu() -> None:
+    """
+    Function to print the list of teams to choose from
+    :return: None
+    """
     width: int = 38
     border = "||"
     print("=" * width)
@@ -46,11 +54,16 @@ def print_stats_menu() -> None:
     print("=" * width)
 
 
-def print_team_stats(team):
+def print_team_stats(team: Dict):
+    """
+    Function to print statistics for a given team
+    :param team: Dict contains the information for the team displayed
+    :return:
+    """
     average_height: float = get_average_height(team)
-    average_height = str(round(average_height, 2))
-    if not len(average_height) % 2:
-        average_height += "0"
+    average_height_str: str = str(round(average_height, 2))
+    if not len(average_height_str) % 2:
+        average_height_str += "0"
     width: int = 120
     border: str = "| |"
     print(width * "-")
@@ -64,7 +77,7 @@ def print_team_stats(team):
     print_framed_text(width, border)
     total_players = len(team["exp_players"]) + len(team["no_exp_players"])
     print_framed_text(width, border, f"Total players: {total_players}    " +
-                      f" Average height: {average_height}", True, 25)
+                      f" Average height: {average_height_str}", True, 25)
     print_framed_text(width, border, f"Experienced players: {len(team['exp_players'])}", True)
     print_framed_text(width, border, f"Inexperienced players: {len(team['no_exp_players'])}", True)
 
@@ -103,6 +116,11 @@ def print_framed_text(width: int = 50, border: str = "", text: str = "",
 
 
 def get_main_option() -> str:
+    """
+    Function to get a choice from a user and return it
+    from the main menu
+    :return: str Returns the choice either 1 or 2
+    """
     menu_choice: str = None
     while menu_choice != "1" and menu_choice != "2":
         try:
@@ -115,19 +133,30 @@ def get_main_option() -> str:
     return menu_choice
 
 
-def get_team_option() -> str:
-    menu_choice: str = input("Enter an option > ")
-    try:
-        menu_choice = int(menu_choice)
-        if menu_choice < 1 or menu_choice > len(constants.TEAMS):
-            raise ValueError
-    except ValueError:
-        print(f"Valid options are 1 through {len(constants.TEAMS)}", end=' ')
-    cls()
-    return menu_choice
+def get_team_option() -> int:
+    """
+    Function to return the team number chosen by the user
+    :return: int
+    """
+    while True:
+        menu_choice: str = input("Enter an option > ")
+        try:
+            menu_choice: int = int(menu_choice)
+            if menu_choice < 1 or menu_choice > len(constants.TEAMS):
+                raise ValueError
+        except ValueError:
+            print(f"Valid options are 1 through {len(constants.TEAMS)}. ", end=' ')
+        else:
+            cls()
+            return menu_choice
 
 
-def get_average_height(team):
+def get_average_height(team: Dict) -> float:
+    """
+    Function to return the average height of all players on a team
+    :param team: Dict contains the team
+    :return: float
+    """
     total: int = 0
     for player in team["exp_players"]:
         total += player["height"]
@@ -137,6 +166,10 @@ def get_average_height(team):
 
 
 def clean_data() -> List[Dict]:
+    """
+    Function to clean the data contained in the constants.py
+    :return: Dict containing the cleaned dictionary
+    """
     players = constants.PLAYERS;
     cleaned_data = []
     for player in players:
@@ -148,11 +181,23 @@ def clean_data() -> List[Dict]:
 
 
 def create_rosters() -> List[Dict]:
+    """
+    Function to create a List of dictionaries holding empty team rosters
+    :return: List[Dict] a list containing a dictionary with an initial state
+    """
     teams = constants.TEAMS
     return [{"name": team, "exp_players": [], "no_exp_players": []} for team in teams]
 
 
-def sort_into_teams(exp: List, no_exp: List, rosters: List[Dict]) -> List[Dict]:
+def sort_into_teams(exp: List[Dict], no_exp: List[Dict], rosters: List[Dict]) -> List[Dict]:
+    """
+    Function to sort the players into teams such that experienced and inexperienced
+    players are evenly distributed among teams
+    :param exp: List[Dict] a list containing experienced players
+    :param no_exp: List[Dict] a list containing inexperienced players
+    :param rosters: List[Dict] the list of teams in their initial state
+    :return: List[Dict] the list of teams after assigned players
+    """
     num_teams = len(rosters)
 
     i = 0
@@ -169,6 +214,10 @@ def sort_into_teams(exp: List, no_exp: List, rosters: List[Dict]) -> List[Dict]:
 
 
 def start_app() -> None:
+    """
+    Function to start the application setting off a series of events
+    :return: None
+    """
     rosters = create_rosters()
     data = clean_data()
     experienced_players = [player for player in data if player["experience"]]
@@ -180,7 +229,7 @@ def start_app() -> None:
         exit()
     else:
         print_stats_menu()
-        team_option: str = int(get_team_option())
+        team_option: int = int(get_team_option())
         print_team_stats(filled_rosters[team_option - 1])
 
 
@@ -188,5 +237,6 @@ if __name__ == "__main__":
     try:
         start_app()
     except KeyboardInterrupt:
+        # This is here to exit gracefully in the event of a keyboard interrupt
         print("Thank you for using our basketball management system.")
         exit()
