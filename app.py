@@ -13,6 +13,15 @@ def cls() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def print_header():
+    # header taken from http://www.asciiworld.com/-Basketball,16-.html
+    print(" _               _        _   _           _ _")
+    print("| |__   __ _ ___| | _____| |_| |__   __ _| | |")
+    print("| '_ \ / _` / __| |/ / _ \ __| '_ \ / _` | | |")
+    print("| |_) | (_| \__ \   <  __/ |_| |_) | (_| | | |")
+    print("|_.__/ \__,_|___/_|\_\___|\__|_.__/ \__,_|_|_|")
+
+
 def print_main_menu() -> None:
     """
     Function takes no arguments
@@ -22,6 +31,8 @@ def print_main_menu() -> None:
     """
     width: int = 38
     border: str = "||"
+    cls()
+    print_header()
     print()
     print("=" * width)
     print_framed_text(width, border, "")
@@ -41,6 +52,8 @@ def print_stats_menu() -> None:
     """
     width: int = 38
     border = "||"
+    print_header()
+    print()
     print("=" * width)
     print_framed_text(width, border)
     print_framed_text(width, border, "Our Teams:", True)
@@ -192,13 +205,15 @@ def clean_data() -> List[Dict]:
     Function to clean the data contained in the constants.py
     :return: Dict containing the cleaned dictionary
     """
-    players = constants.PLAYERS;
+    players = constants.PLAYERS
     cleaned_data = []
     for player in players:
-        player["experience"] = player["experience"] == "YES"
-        player["guardians"] = player["guardians"].split(" and ")
-        player["height"] = int(player["height"].replace("inches", ""))
-        cleaned_data.append(player)
+        new_player = {}
+        new_player["name"] = player["name"]
+        new_player["experience"] = player["experience"] == "YES"
+        new_player["guardians"] = player["guardians"].split(" and ")
+        new_player["height"] = int(player["height"].replace("inches", ""))
+        cleaned_data.append(new_player)
     return cleaned_data
 
 
