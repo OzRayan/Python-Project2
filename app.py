@@ -13,8 +13,11 @@ def cls() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def print_header():
-    # header taken from http://www.asciiworld.com/-Basketball,16-.html
+def print_header() -> None:
+    """
+    Function to print a simple header before the smaller menus
+    :return: None
+    """
     print(" _               _        _   _           _ _")
     print("| |__   __ _ ___| | _____| |_| |__   __ _| | |")
     print("| '_ \ / _` / __| |/ / _ \ __| '_ \ / _` | | |")
